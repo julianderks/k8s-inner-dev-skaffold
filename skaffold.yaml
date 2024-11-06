@@ -1,0 +1,45 @@
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
+  name: my-microservice
+build:
+  tagPolicy:
+    envTemplate:
+      template: "{{.SEMVER}}"
+  artifacts:
+    - image: europe-west4-docker.pkg.dev/sxxx
+      context: .
+      docker:
+        dockerfile: Dockerfile
+      hooks:
+        after:
+          - command: ["./helm-package-push.sh"]
+  local:
+    push: false
+
+deploy:
+  helm:
+    releases:
+      - name: my-microservice
+        chartPath: chart
+        valuesFiles:
+          - chart/values.yaml
+        setValues:
+          image.repository: europe-west4-docker.pkg.dev/xxx
+      - name: redis-release
+        repo: https://charts.bitnami.com/bitnami
+        remoteChart: redis
+        setValues:
+          architecture: standalone
+          auth.enabled: false
+portForward:
+  - resourceType: service
+    resourceName: my-microservice
+    namespace: default
+    port: 5000
+    localPort: 8080
+  - resourceType: service
+    resourceName: redis-release-master
+    namespace: default
+    port: 6379
+    localPort: 6379
