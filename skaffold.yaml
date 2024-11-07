@@ -7,7 +7,7 @@ build:
     envTemplate:
       template: "{{.SEMVER}}"
   artifacts:
-    - image: europe-west4-docker.pkg.dev/sxxx
+    - image: europe-west4-docker.pkg.dev/shared-9456/sng/my-microservice
       context: .
       docker:
         dockerfile: Dockerfile
@@ -16,7 +16,6 @@ build:
           - command: ["./helm-package-push.sh"]
   local:
     push: false
-
 deploy:
   helm:
     releases:
@@ -25,7 +24,7 @@ deploy:
         valuesFiles:
           - chart/values.yaml
         setValues:
-          image.repository: europe-west4-docker.pkg.dev/xxx
+          image.repository: europe-west4-docker.pkg.dev/shared-9456/sng/my-microservice
       - name: redis-release
         repo: https://charts.bitnami.com/bitnami
         remoteChart: redis
