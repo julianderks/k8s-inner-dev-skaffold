@@ -9,6 +9,8 @@ spec:
       app: {{ .Release.Name }}
   template:
     metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
       labels:
         app: {{ .Release.Name }}
     spec:
@@ -17,10 +19,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
             - containerPort: 5000
-          env:
-            - name: PORT
-              value: "5000"
-            - name: REDIS_HOST
-              value: "redis-release-master"
-            - name: REDIS_PORT
-              value: "6379" 
+          envFrom:
+          - configMapRef:
+              name: {{ .Release.Name }}
+ 

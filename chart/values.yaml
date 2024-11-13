@@ -1,4 +1,4 @@
-replicaCount: 1
+replicaCount: 2
 
 image:
   repository: my-microservice
@@ -8,3 +8,5 @@ image:
 service:
   type: ClusterIP
   port: 80
+
+importantEnvValue: "dev"

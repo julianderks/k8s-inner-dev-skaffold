@@ -8,9 +8,6 @@ Skaffold - For streamlining the development workflow.
 Python - For the microservice development.
 
 Kubernetes VSCODE:
-
-kind create cluster --name
-
 kind delete cluster --name my-cluster
 kind create cluster --name my-cluster
 
