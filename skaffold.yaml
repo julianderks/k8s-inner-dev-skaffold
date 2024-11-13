@@ -17,7 +17,7 @@ build:
   local:
     push: false
 deploy:
-  kubeContext: my-kind-cluster
+  kubeContext: kind-my-cluster
   helm:
     releases:
       - name: my-microservice
