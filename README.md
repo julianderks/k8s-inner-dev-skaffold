@@ -1,19 +1,34 @@
-Prerequisites
-Make sure you have the following tools installed:
+## How-to
 
-Docker - For containerizing the microservice.
-Kind - To create a local Kubernetes cluster.
-Helm - For packaging Kubernetes manifests.
-Skaffold - For streamlining the development workflow.
-Python - For the microservice development.
+### Development loop
 
-Kubernetes VSCODE:
-kind delete cluster --name my-cluster
-kind create cluster --name my-cluster
+1. Create local k8s cluster `my-kind-cluster` via KinD
 
-skaffold dev
-skaffold render
-skaffold build --push=true
+    ```sh
+    kind create cluster --name my-kind-cluster
+    ```
 
+2. Start skaffold to check for live changes in relevant code (/chart, /src, Dockerfile, ...)
+
+    ```sh
+    skaffold dev
+    ```
+    now every change wil cause a rebuilding and redeployment of docker image / helm chart (only if necessary)
+
+### Build & Push final image + chart
+
+```sh
+# Set env variable to use as tag for IMAGE & CHART
 export SEMVER="1.2.3"
+# Build image & chart, push to GCP Artifact registry
 skaffold build --push=true --cache-artifacts=false
+```
+
+### Cleanup
+
+delete local k8s cluster to save on resource if you want to
+
+```sh
+kind delete cluster --name my-kind-cluster
+```
+
